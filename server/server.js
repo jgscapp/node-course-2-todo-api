@@ -1,3 +1,5 @@
+require('./config/config');
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');   //get JSON and convert to object
@@ -8,7 +10,7 @@ var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
 var app = express();
-const port = process.env.PORT || 3000;   //PORT  is set if is running in HEROKU
+const port = process.env.PORT;   //PORT  is set if is running in HEROKU
 
 app.use(bodyParser.json());
 
