@@ -32,6 +32,7 @@ var UserSchema = new mongoose.Schema({
     }]
 });
 
+//we OVERRIDE this method
 //method to return what exactly get back when a mongoose model is  converted  to a JSON value
 UserSchema.methods.toJSON = function () {
   var user = this;
@@ -54,6 +55,25 @@ UserSchema.methods.generateAuthToken = function () {
   });
 };
 
+UserSchema.statics.findByToken = function (token) {
+  var User = this;
+  var decoded;
+
+  try {
+      decoded = jwt.verify(token, 'abc123');
+  } catch (e) {
+    // return new Promise((resolve, reject) => {
+    //   reject();
+    // });
+        return Promise.reject();
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,   //to query a nested document we wrap the values in qutoes
+    'tokens.access': 'auth'
+  });
+};
 
 var User = mongoose.model('User', UserSchema );
 
